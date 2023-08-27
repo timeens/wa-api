@@ -18,6 +18,10 @@ export class WaClientRepositoryService extends CrudService implements OnModuleIn
         this.resetClientStates();
     }
 
+    getClient(clientId: string) {
+        return this.waService.getClient(clientId);
+    }
+
     async resetClientStates() {
         Logger.log(`client states reset`);
         await this.model.updateMany({ state: WA_CLIENT_STATES.Ready }, { state: WA_CLIENT_STATES.Offline });

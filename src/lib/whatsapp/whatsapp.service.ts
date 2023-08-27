@@ -3,6 +3,7 @@ import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { WA_CLIENT_EVENT_TYPES } from './interfaces/whatsapp-client-events.enum';
 import { WaClientAuthFailureEvent, WaClientAuthenticatedEvent, WaClientDisconnectedEvent, WaClientMessageEvent, WaClientQrCodeReceivedEvent, WaClientReadyEvent } from './interfaces/whatsapp-client-events.interfaces';
+import { WhatsappClient } from './whatsapp-client.model';
 
 @Injectable()
 export class WhatsappService implements OnModuleDestroy {
@@ -10,6 +11,14 @@ export class WhatsappService implements OnModuleDestroy {
     private clientPool: Array<{ clientId: string, client: Client }> = [];
 
     constructor(private eventEmitter: EventEmitter2) { }
+
+
+    getClient(clientId): WhatsappClient | null {
+        const c = this.clientPool.find(p => p.clientId.toString() === clientId.toString());
+        if (c) return new WhatsappClient(c.clientId, c.client);
+
+        return null;
+    }
 
     initClient(clientId: string, config = { headless: false }) {
         const client = new Client({
@@ -59,14 +68,9 @@ export class WhatsappService implements OnModuleDestroy {
         Logger.log(`Client ${clientId} removed from pool (Poolsize: ${this.currentPoolSize})`);
     }
 
-    getClient(clientId) {
-        return this.clientPool.find(p => p.clientId === clientId) || null;
-    }
-
     get currentPoolSize() {
         return this.clientPool.length;
     }
-
 
     onModuleDestroy() {
         this.clientPool.map(c => c.client.destroy());
