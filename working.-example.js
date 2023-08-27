@@ -36,12 +36,6 @@ client.on('message', (msg) => {
     console.log('Client message received!');
 });
 
-client.on('message', message => {
-	if(message.body === '!ping') {
-		message.reply('pong');
-	}
-});
-
 
 console.log('init...');
 client.initialize();
