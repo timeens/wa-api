@@ -18,12 +18,15 @@ export class WaClientControllerController {
 
     @Get('')
     @ApiOkResponse({ type: [WaClientTransformer] })
+    @ApiOperation({ summary: 'Find clients' })
     getClients() {
         return this.waClientRepo.find();
     }
 
     @Get(':id')
     @ApiParam({ name: 'id' })
+    @ApiParam({ name: 'id' })
+    @ApiOperation({ summary: 'Get client details' })
     @ApiOkResponse({ type: WaClientTransformer })
     getClient(@Param('id') id: string) {
         return this.waClientRepo.findOneById(id);
