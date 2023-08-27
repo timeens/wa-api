@@ -12,7 +12,7 @@ import { WaClientResource } from 'src/lib/mongo/schemas/wa-client-resource.schem
 @Controller('client')
 @TransformerConfig({ transformer: WaClientTransformer })
 @UrlParamValidationConfig([{ param: 'id', existsInDbResource: WaClientResource.name }])
-export class WaClientControllerController {
+export class WaClientController {
 
     constructor(private waClientRepo: WaClientRepositoryService) { }
 

@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { CrudService } from '../repository-helper/crud.service';
 import { WaClientResource } from 'src/lib/mongo/schemas/wa-client-resource.schema';
 import { OnEvent } from '@nestjs/event-emitter';
@@ -15,6 +15,12 @@ export class WaClientRepositoryService extends CrudService implements OnModuleIn
     onModuleInit() {
         this.init(WaClientResource.name);
         this.waService = this.moduleRef.get(WhatsappService, { strict: false });
+        this.resetClientStates();
+    }
+
+    async resetClientStates() {
+        Logger.log(`client states reset`);
+        await this.model.updateMany({ state: WA_CLIENT_STATES.Ready }, { state: WA_CLIENT_STATES.Offline });
     }
 
     async startClient(id: string) {

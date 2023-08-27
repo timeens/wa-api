@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { WaClientControllerController } from './wa-client-controller.controller';
 import { WaClientRepositoryModule } from 'src/repositories/whatsapp-client/wa-client-repository.module';
+import { WaClientController } from './wa-client.controller';
 
 @Module({
     imports: [WaClientRepositoryModule],
-    controllers: [WaClientControllerController],
+    controllers: [WaClientController],
     providers: [],
 })
 export class ClientEndpointModule { }
