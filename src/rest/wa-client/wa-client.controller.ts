@@ -11,7 +11,7 @@ import { WaClientResource } from 'src/lib/mongo/schemas/wa-client-resource.schem
 @ApiTags(getTagName('whatsapp-client'))
 @Controller('client')
 @TransformerConfig({ transformer: WaClientTransformer })
-@UrlParamValidationConfig([{ param: 'id', existsInDbResource: WaClientResource.name }])
+@UrlParamValidationConfig([{ param: 'id', resource: WaClientResource.name, existsInDb: true }])
 export class WaClientController {
 
     constructor(private waClientRepo: WaClientRepositoryService) { }
@@ -24,7 +24,6 @@ export class WaClientController {
     }
 
     @Get(':id')
-    @ApiParam({ name: 'id' })
     @ApiParam({ name: 'id' })
     @ApiOperation({ summary: 'Get client details' })
     @ApiOkResponse({ type: WaClientTransformer })

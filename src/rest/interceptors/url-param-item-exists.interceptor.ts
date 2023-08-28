@@ -5,7 +5,9 @@ import * as mongoose from 'mongoose';
 
 interface UrlParamsValidationConfigInterface {
   param: string;
-  existsInDbResource?: string;
+  resource?: string,
+  existsInDb?: boolean;
+  validate?: (model) => boolean
 }
 
 export const UrlParamValidationConfig = (config: UrlParamsValidationConfigInterface[]) => SetMetadata('url_param_validation', config);
@@ -42,10 +44,15 @@ export class UrlParamItemExistsInterceptor implements NestInterceptor {
   }
 
   private async validateUrlParam(config: UrlParamsValidationConfigInterface, value) {
-    if (config.existsInDbResource) {
-      const m = this.mondoSer.getModel(config.existsInDbResource)
-
+    if (config.validate) {
+      if (!config.resource) Logger.error(`Resource missing in URL param validation`);
+      const m = this.mondoSer.getModel(config.resource);
+      if (!config.validate(await m.findById(value))) throw new NotFoundException();
+    }
+    if (config.existsInDb) {
+      if (!config.resource) Logger.error(`Resource missing in URL param validation`);
       if (!mongoose.isValidObjectId(value)) throw new NotFoundException();
+      const m = this.mondoSer.getModel(config.resource);
       const exists = await m.findById(value);
       if (!exists) throw new NotFoundException();
     }
