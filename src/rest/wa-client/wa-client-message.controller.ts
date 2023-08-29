@@ -2,7 +2,6 @@ import { Controller, BadRequestException, Param, Post, Body } from '@nestjs/comm
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { getTagName } from 'src/lib/swagger/swagger-tags';
 import { TransformerConfig } from '../interceptors/transformer.interceptor';
-import { WaClientTransformer } from './transformer/wa-client.transformer';
 import { UrlParamValidationConfig } from '../interceptors/url-param-item-exists.interceptor';
 import { WaClientResource } from 'src/lib/mongo/schemas/wa-client-resource.schema';
 import { SendWaMessageDto } from './dto/send-wa-message.dto';
